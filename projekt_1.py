@@ -10,12 +10,14 @@ user_list = {"bob": "123", "ann": "pass123", "mike": "password123", "liz": "pass
 user_name = input("Enter your user name: ")
 password = input("Enter your password: ")
 
+print("-" * 40)
+
 if user_list.get(user_name) == password:
     print(f"Welcome to the app, {user_name}.\nWe have 3 texts to be anylized.")
-
 else:
     print("Unregistered user, terminating the program.")
     exit()
+print("-" * 40)
 
 TEXTS = {
     "1": """ Situated about 10 miles west of Kemmerer,
@@ -47,42 +49,21 @@ garpike and stingray are also present.""",
 
 chosen_text = input("Enter a number between 1 and 3 to select: ")
 
-if chosen_text.isdigit() and chosen_text in TEXTS:  # kontrola podminky
+print("-" * 40)
+
+if chosen_text in TEXTS:
     my_text = TEXTS[chosen_text]
+    split_text = [word.strip(".,!?") for word in my_text.split()]
 
-    split_text = my_text.split()  # rozdeleni texu na jednotliva slova
-    word_count = len(split_text)  # pocet slov v vybranem textu
-
-    titlecase_words = []  # slova zacinajici se velkymi pismeny
-    for word in split_text:
-        if word.istitle():
-            titlecase_words.append(word)
-
-    titlecase_words_count = len(
-        titlecase_words
-    )  # pocet slov zacinajicich velkymi pismeny
-
-    uppercase_words = []  # slova psane velkymi pismeny
-    for word in split_text:
-        if word.isupper() and word.isalpha():
-            uppercase_words.append(word)
-
-    uppercase_words_count = len(uppercase_words)  # pocet slov psanych velkymi pismeny
-
-    lowercase_words = []  # slova psane malymi pismeny
-    for word in split_text:
-        if word.islower():
-            lowercase_words.append(word)
-
-    lowercase_words_count = len(lowercase_words)  # pocet slov psanych malymi pismeny
-
-    numeric_string = []  # obsah cisel v texu
-    for word in split_text:
-        if word.isdigit():
-            numeric_string.append(int(word))
-
-    numeric_string_count = len(numeric_string)  # pocet cisel
-    sum_of_all_numbers = sum(numeric_string)  # suma vsech cisel
+    word_count = len(split_text)
+    titlecase_words_count = len([word for word in split_text if word.istitle()])
+    uppercase_words_count = len(
+        [word for word in split_text if word.isupper() and word.isalpha()]
+    )
+    lowercase_words_count = len([word for word in split_text if word.islower()])
+    numeric_string = [int(word) for word in split_text if word.isdigit()]
+    numeric_string_count = len(numeric_string)
+    sum_of_all_numbers = sum(numeric_string)
 
     print(f"There are {word_count} words in the selected text.")
     print(f"There are {titlecase_words_count} titlecase words.")
@@ -90,9 +71,15 @@ if chosen_text.isdigit() and chosen_text in TEXTS:  # kontrola podminky
     print(f"There are {lowercase_words_count} lowercase words.")
     print(f"There are {numeric_string_count} numeric strings.")
     print(f"The sum of all numbers is {sum_of_all_numbers}.")
-
 else:
     print(f"The inserted number is incorrect, terminating the program.")
+print("-" * 40)
+print("LEN|  OCCURENCES      |NR.")
+print("-" * 40)
 
-# Bohuzel jsem nevedela jak vytvorit tabulku na konci. 
-# Kod jsem formatovala v Python Formatter.
+length_words_count = {}
+for word in split_text:
+    length = len(word)
+    length_words_count[length] = length_words_count.get(length, 0) + 1
+for length, occurences in sorted(length_words_count.items()):
+    print(f"{length:>3}|{'*' * occurences:<18}|{occurences}")
